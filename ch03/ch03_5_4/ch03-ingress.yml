@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  haproxy:
+    image: dockercloud/haproxy
+    networks: 
+      - ch03 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+    ports:
+      - 80:80
+      - 1936:1936 # for stats page (basic auth. stats:stats)
+
+networks:
+  ch03:
+    external: true

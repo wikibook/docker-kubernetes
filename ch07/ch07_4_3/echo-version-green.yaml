@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-version-green
+  labels:
+    app: echo-version
+    color: green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-version
+      color: green
+  template:
+    metadata:
+      labels:
+        app: echo-version 
+        color: green
+    spec:
+      containers:
+      - name: echo-version 
+        image: gihyodocker/echo-version:0.2.0 
+        ports:
+        - containerPort: 8080

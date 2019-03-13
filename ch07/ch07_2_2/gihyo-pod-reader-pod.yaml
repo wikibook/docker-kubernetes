@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: gihyo-pod-reader
+  namespace: kube-system
+  labels:
+    app: gihyo-pod-reader
+spec:
+  serviceAccountName: gihyo-pod-reader 
+  containers:
+  - name: kubectl
+    image: lachlanevenson/k8s-kubectl:v1.10.4
+    command:
+    - sh
+    - -c
+    - |
+      while true
+      do
+        echo "check pod..."
+        kubectl get pod --all-namespaces
+        sleep 30
+      done

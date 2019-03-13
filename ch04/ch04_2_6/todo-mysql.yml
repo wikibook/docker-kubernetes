@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  master:
+    image: registry:5000/ch04/tododb:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role != manager]
+    environment:
+      MYSQL_ROOT_PASSWORD: gihyo 
+      MYSQL_DATABASE: tododb 
+      MYSQL_USER: gihyo 
+      MYSQL_PASSWORD: gihyo 
+      MYSQL_MASTER: "true" 
+    networks:
+      - todoapp
+
+  slave:
+    image: registry:5000/ch04/tododb:latest
+    deploy:
+      replicas: 2
+      placement:
+        constraints: [node.role != manager]
+    depends_on:
+      - master
+    environment:
+      MYSQL_MASTER_HOST: master
+      MYSQL_ROOT_PASSWORD: gihyo 
+      MYSQL_DATABASE: tododb 
+      MYSQL_USER: gihyo 
+      MYSQL_PASSWORD: gihyo 
+      MYSQL_ROOT_PASSWORD: gihyo 
+      MYSQL_REPL_USER: repl 
+      MYSQL_REPL_PASSWORD: gihyo 
+    networks:
+      - todoapp
+
+networks:
+  todoapp:
+    external: true

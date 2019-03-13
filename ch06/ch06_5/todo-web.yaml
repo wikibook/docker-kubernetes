@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoweb
+  labels:
+    app: todoweb
+spec:
+  selector:
+    app: todoweb
+  ports:
+    - name: http
+      port: 80
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoweb 
+  labels:
+    name: todoweb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todoweb
+  template:
+    metadata:
+      labels:
+        app: todoweb
+    spec:
+      volumes:
+      - name: assets
+        emptyDir: {}
+      containers:
+      - name: nginx
+        image: gihyodocker/nginx-nuxt:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: WORKER_PROCESSES
+          value: "2"
+        - name: WORKER_CONNECTIONS
+          value: "1024"
+        - name: LOG_STDOUT
+          value: "true"
+        - name: BACKEND_HOST
+          value: "localhost:3000"
+        volumeMounts:
+        - mountPath: /var/www/_nuxt
+          name: assets 
+
+      - name: web 
+        image: gihyodocker/todoweb:latest
+        imagePullPolicy: Always
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - cp
+              - -R
+              - /todoweb/.nuxt/dist
+              - /
+        ports:
+        - containerPort: 3000 
+        env:
+        - name: TODO_API_URL
+          value: http://todoapi
+        volumeMounts:
+        - mountPath: /dist
+          name: assets 

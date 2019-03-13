@@ -1,0 +1,12 @@
+schemaVersion: "2.0.0"
+
+fileExistenceTests:
+- name: "init-data.sh"
+  path: "/usr/local/bin/init-data.sh"
+  shouldExist: true
+  permissions: "-rwxr-xr-x"
+
+fileContentTests:
+- name: "mysqld.cnf"
+  path: "/etc/mysql/mysql.conf.d/mysqld.cnf"
+  expectedContents: ['log-bin=\/var\/log\/mysql\/.*\.log']

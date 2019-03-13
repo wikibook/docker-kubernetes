@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-version-strategy
+  labels:
+    app: echo-version
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 3
+      maxSurge: 4
+  selector:
+    matchLabels:
+      app: echo-version 
+  template:
+    metadata:
+      labels:
+        app: echo-version 
+    spec:
+      containers:
+      - name: echo-version 
+        image: gihyodocker/echo-version:0.1.0 
+        ports:
+        - containerPort: 8080

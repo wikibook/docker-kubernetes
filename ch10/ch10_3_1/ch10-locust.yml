@@ -1,0 +1,21 @@
+version: "3"
+services:
+  locust:
+    image: registry:5000/ch09/locust:latest
+    ports:
+      - "80:8089"
+    command:
+      - "-f"
+      - "senario.py"
+      - "-H"
+      - "http://target_echo:8080"
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - loadtest 
+
+networks:
+  loadtest:
+    external: true

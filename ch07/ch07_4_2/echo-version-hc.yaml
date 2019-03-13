@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-version-hc
+  labels:
+    app: echo-version
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-version
+  template:
+    metadata:
+      labels:
+        app: echo-version
+    spec:
+      containers:
+      - name: echo-version
+        image: gihyodocker/echo-version:0.1.0 
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /live.txt
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 8080
+          timeoutSeconds: 3
+          initialDelaySeconds: 15
+        ports:
+        - containerPort: 8080

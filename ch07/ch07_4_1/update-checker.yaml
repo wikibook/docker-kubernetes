@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: update-checker
+  labels:
+    app: update-checker
+spec:
+  containers:
+  - name: kubectl
+    image: gihyodocker/fundamental:0.1.0
+    command:
+    - sh
+    - -c
+    - |
+      while true
+      do
+        APP_VERSION=`curl -s http://echo-version/`
+        echo "[`date`] $APP_VERSION "
+        sleep 1
+      done

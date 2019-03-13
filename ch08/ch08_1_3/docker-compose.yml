@@ -1,0 +1,39 @@
+version: "3"
+services:
+  elasticsearch:
+    image: elasticsearch:5.6-alpine
+    ports:
+      - "9200:9200"
+    volumes:
+    - "./jvm.options:/usr/share/elasticsearch/config/jvm.options"
+
+  kibana:
+    image: kibana:5.6
+    ports: 
+    - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
+    depends_on:
+    - elasticsearch
+
+  fluentd:
+    image: ch07/fluentd:latest 
+    ports:
+      - "24224:24224"
+      - "24220:24220"
+    depends_on:
+    - elasticsearch
+
+  echo:
+    image: gihyodocker/echo:latest
+    ports:
+    - "8080:8080"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: "localhost:24224"
+        tag: "docker.{{.Name}}"
+    depends_on:
+    - fluentd
+
+
