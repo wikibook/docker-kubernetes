@@ -31,6 +31,8 @@ spec:
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
             value: "http"
+          - name: FLUENT_UID
+            value: "0"
         resources:
           limits:
             memory: 200Mi
