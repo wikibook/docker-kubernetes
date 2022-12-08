@@ -14,7 +14,7 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "cross-env": "^5.1.5",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "nuxt": "^1.0.0",
     "vuetify": "^1.0.0"
   },
